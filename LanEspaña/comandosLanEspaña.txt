@@ -1,0 +1,120 @@
+##SW4
+
+conf t
+vlan 25
+name Usuarios_Tesoreria
+exit
+vlan 75
+name Usuarios_Vicepresidencia
+exit
+int f1/5
+switchport mode access
+switchport access vlan 25
+spanning-tree portfast
+no sh
+exit
+int f1/6
+switchport mode access
+switchport access vlan 75
+spanning-tree portfast
+no sh
+exit
+int f1/10
+switchport mode trunk
+switchport trunk native vlan 1
+no sh
+int f1/1
+switchport mode trunk
+switchport trunk encapsulation dot1q
+no sh
+exit
+
+##SW5
+
+conf t
+vlan 25
+name Usuarios_Tesoreria
+exit
+vlan 75
+name Usuarios_Vicepresidencia
+exit
+int f1/5
+switchport mode access
+switchport access vlan 75
+spanning-tree portfast
+no sh
+exit
+int f1/6
+switchport mode access
+switchport access vlan 25
+spanning-tree portfast
+no sh
+exit
+int f1/10
+switchport mode trunk
+switchport trunk native vlan 1
+no sh
+int f1/2
+switchport mode trunk
+switchport trunk encapsulation dot1q
+no sh
+exit
+
+##MLSW
+
+conf t
+vlan 25
+name Usuarios_Tesoreria
+exit
+vlan 75
+name Usuarios_Vicepresidencia
+exit
+int f1/1
+switchport mode trunk
+switchport trunk native vlan 1
+no sh
+exit
+int f1/2
+switchport mode trunk
+switchport trunk encapsulation dot1q
+no sh
+exit
+int f1/3
+switchport mode trunk
+switchport trunk encapsulation dot1q
+no sh
+exit
+
+##R2_Esp
+
+conf t
+vlan 25
+name Usuarios_Tesoreria
+exit
+vlan 75
+name Usuarios_Vicepresidencia
+exit
+int f0/0
+no sh
+exit
+int f0/0.25
+encapsulation dot1Q 25
+ip address 10.106.0.1 255.255.254.0
+no sh
+exit
+int f0/0.75
+encapsulation dot1Q 75
+ip address 10.106.2.1 255.255.254.0
+no sh
+exit
+service dhcp
+ip dhcp pool Vlan25
+network 10.106.0.0 255.255.254.0
+default-router 10.106.0.1
+exit
+ip dhcp excluded-address 10.106.0.1 10.106.0.9
+ip dhcp pool Vlan75
+network 10.106.2.0 255.255.254.0
+default-router 10.106.2.1
+exit
+ip dhcp excluded-address 10.106.2.1 10.106.2.9

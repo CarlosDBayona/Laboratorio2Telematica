@@ -1,0 +1,147 @@
+##SW2
+
+conf t
+vlan 50
+name Usuarios_Ingenieria
+exit
+vlan 100
+name Usuarios_Tecnologia
+exit
+vlan 99
+name Usuarios_Gestion
+exit
+int f1/5
+switchport mode access
+switchport access vlan 50
+spanning-tree portfast
+no sh
+exit
+int f1/6
+switchport mode access
+switchport access vlan 100
+spanning-tree portfast
+no sh
+exit
+int f1/10
+switchport mode trunk
+switchport trunk native vlan 99
+no sh
+int f1/1
+switchport mode trunk
+switchport trunk native vlan 99
+no sh
+exit
+
+##SW3
+
+conf t
+vlan 50
+name Usuarios_Ingenieria
+exit
+vlan 100
+name Usuarios_Tecnologia
+exit
+vlan 99
+name Usuarios_Gestion
+exit
+int f1/5
+switchport mode access
+switchport access vlan 50
+spanning-tree portfast
+no sh
+exit
+int f1/6
+switchport mode access
+switchport access vlan 100
+spanning-tree portfast
+no sh
+exit
+int f1/10
+switchport mode trunk
+switchport trunk native vlan 99
+no sh
+int f1/2
+switchport mode trunk
+switchport trunk native vlan 99
+no sh
+exit
+
+
+##SW1
+conf t
+vlan 50
+name Usuarios_Ingenieria
+exit
+vlan 100
+name Usuarios_Tecnologia
+exit
+vlan 99
+name Usuarios_Gestion
+exit
+int f1/1
+switchport mode trunk
+switchport trunk native vlan 99
+no sh
+exit
+int f1/2
+switchport mode trunk
+switchport trunk native vlan 99
+no sh
+exit
+int f1/3
+switchport mode trunk
+switchport trunk native vlan 99
+no sh
+exit
+
+##R1_BOG
+
+conf t
+vlan 50
+name Usuarios_Ingenieria
+exit
+vlan 100
+name Usuarios_Tecnologia
+exit
+vlan 99
+name Usuarios_Gestion
+exit
+int f0/0
+no sh
+exit
+int f0/0.50
+encapsulation dot1Q 50
+ip address 172.26.0.1 255.255.252.0
+no sh
+exit
+int f0/0.100
+encapsulation dot1Q 100
+ip address 172.26.4.1 255.255.252.0
+no sh
+exit
+service dhcp
+ip dhcp pool Vlan50
+network 172.26.0.0 255.255.252.0
+default-router 172.26.0.1
+exit
+ip dhcp excluded-address 172.26.0.1 172.26.0.9
+ip dhcp pool Vlan100
+network 172.26.4.0 255.255.252.0
+default-router 172.26.4.1
+exit
+ip dhcp excluded-address 172.26.4.1 172.26.4.9
+
+int f0/0.50
+ip nat inside
+exit
+int f0/0.100
+ip nat inside
+exit
+access-list 100 permit ip 172.26.0.0 0.0.3.255 any
+access-list 101 permit ip 172.26.4.0 0.0.3.255 any
+int s0/0
+ip nat outside
+exit
+ip nat inside source list 100 interface s0/0 overload
+ip nat inside source list 101 interface s0/0 overload
+exit
