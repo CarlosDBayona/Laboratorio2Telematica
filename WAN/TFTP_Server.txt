@@ -1,0 +1,14 @@
+conf t
+int f0/0
+ip add 162.125.10.2 255.255.255.0
+no sh 
+exit
+router rip
+version 2
+network 190.85.206.0
+network 162.125.10.0
+exit
+access-list 10 deny 216.169.6.71 0.0.0.255
+access-list 10 permit any
+int f0/0
+ip access-group 10 in 

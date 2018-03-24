@@ -1,0 +1,7 @@
+conf t
+int f0/0
+ip add 104.92.186.30 255.255.255.0
+no sh 
+exit
+router eigrp 1
+network 104.92.186.0

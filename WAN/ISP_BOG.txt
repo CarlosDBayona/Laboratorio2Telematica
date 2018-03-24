@@ -1,0 +1,29 @@
+conf t
+int s0/1
+ip add 23.16.6.44 255.255.255.0
+clock rate 64000
+no sh
+exit
+int s0/2 
+ip add 190.85.206.4 255.255.255.0
+clock rate 64000
+no sh
+exit
+int s0/0
+ip add 190.85.206.2 255.255.255.0
+clock rate 64000
+no sh
+exit
+int f0/0
+ip add 162.125.10.3 255.255.255.0
+no sh
+exit
+router rip
+version 2
+network 162.125.10.0
+network 190.85.206.0
+network 23.16.6.0
+exit
+int loopback 0
+ip add 209.100.6.2 255.255.255.0
+exit

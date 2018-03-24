@@ -118,3 +118,26 @@ network 10.106.2.0 255.255.254.0
 default-router 10.106.2.1
 exit
 ip dhcp excluded-address 10.106.2.1 10.106.2.9
+
+int f0/0.25
+ip nat inside
+exit
+int f0/0.75
+ip nat inside
+exit
+access-list 100 permit ip 10.106.0.0 0.0.1.255 any
+access-list 101 permit ip 10.106.2.0 0.0.1.255 any
+int s0/0
+ip add 216.169.6.71 255.255.255.0
+clock rate 64000
+ip nat outside
+no sh 
+exit
+ip nat inside source list 100 interface s0/0 overload
+ip nat inside source list 101 interface s0/0 overload
+router eigrp 1
+network 216.169.6.0
+exit
+int loopback 0
+ip add 209.100.6.6 255.255.255.0
+exit
